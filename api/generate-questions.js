@@ -34,9 +34,9 @@ export default async function handler(req, res) {
             );
 
         const model =
-            genAI.getGenerativeModel({
-                model: "gemini-1.5-flash"
-            });
+    genAI.getGenerativeModel({
+        model: "gemini-2.5-flash"
+    });
 
         const prompt = `
 Generate ${questionCount} multiple-choice questions about ${topic}.
