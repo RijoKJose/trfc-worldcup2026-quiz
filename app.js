@@ -2054,45 +2054,60 @@ function downloadCSV(
 
 }
 
-function showLeaderboardAdmin(admin=false){
+async function showLeaderboard(admin=false){
 
-showSection('leaderboardSection');
-await loadQuizLeaderboard(admin);
+    showSection('leaderboardSection');
 
-const table=document.getElementById('leaderboardTable');
+    await loadQuizLeaderboard();
 
-let html='<tr><th>Name</th><th>Correct</th><th>Wrong</th><th>Points</th>';
+    const table =
+        document.getElementById(
+            'leaderboardTable'
+        );
 
-if(admin){
-html+='<th>Action</th>';
-}
+    let html =
+        '<tr><th>Name</th><th>Correct</th><th>Wrong</th><th>Points</th>';
 
-html+='</tr>';
+    if (admin) {
 
-leaderboard.sort((a,b)=>b.points-a.points);
+        html += '<th>Action</th>';
 
-leaderboard.forEach((l,index)=>{
+    }
 
-html+='<tr>'+
-'<td>'+l.name+'</td>'+
-'<td>'+l.correct+'</td>'+
-'<td>'+l.wrong+'</td>'+
-'<td>'+l.points+'</td>';
+    html += '</tr>';
 
-if(admin){
+    leaderboard.sort(
+        (a, b) => b.points - a.points
+    );
 
-html+='<td>'+
-'<button onclick="editPoints('+index+')">Edit</button>'+
-'<button onclick="removePoints('+index+')">Remove</button>'+
-'</td>';
+    leaderboard.forEach(
+        (l, index) => {
 
-}
+            html +=
+                '<tr>' +
+                '<td>' + l.name + '</td>' +
+                '<td>' + l.correct + '</td>' +
+                '<td>' + l.wrong + '</td>' +
+                '<td>' + l.points + '</td>';
 
-html+='</tr>';
+            if (admin) {
 
-});
+                html +=
+                    '<td>' +
+                    '<button onclick="editPoints(' + index + ')">Edit</button>' +
+                    '<button onclick="removePoints(' + index + ')">Remove</button>' +
+                    '</td>';
 
-table.innerHTML=html;
+            }
+
+            html += '</tr>';
+
+        }
+
+    );
+
+    table.innerHTML = html;
+
 }
 
 function renderLeaderboardManage(){
