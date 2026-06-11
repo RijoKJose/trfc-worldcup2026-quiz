@@ -2193,17 +2193,6 @@ renderUsers();
 alert('Users Cleared');
 }
 
-function exportLeaderboard(){
-
-let csv='Name,Correct,Wrong,Points\n';
-
-leaderboard.forEach(l=>{
-csv+=l.name+','+l.correct+','+l.wrong+','+l.points+'\n';
-});
-
-downloadCSV(csv,'leaderboard.csv');
-}
-
 function downloadCSV(content,file){
 
 const blob=new Blob([content],{type:'text/csv'});
