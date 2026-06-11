@@ -2193,17 +2193,6 @@ renderUsers();
 alert('Users Cleared');
 }
 
-function exportUsers(){
-
-let csv='Name,Email,Phone\n';
-
-users.forEach(u=>{
-csv+=u.name+','+u.email+','+u.phone+'\n';
-});
-
-downloadCSV(csv,'users.csv');
-}
-
 function exportLeaderboard(){
 
 let csv='Name,Correct,Wrong,Points\n';
