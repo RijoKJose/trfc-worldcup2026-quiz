@@ -62,6 +62,7 @@ Rules:
 - The correct answer position must vary naturally across all questions.
 - The "answer" field must contain the correct index (0, 1, 2, or 3) after randomization.
 - Avoid repeating the same answer index consecutively.
+- Questions should not repeat the same whenever generating the questions and options
 - No markdown.
 - No explanations.
 - Return ONLY valid JSON.
