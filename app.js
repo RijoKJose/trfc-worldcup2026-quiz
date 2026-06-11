@@ -1821,7 +1821,6 @@ nextQuestion();
 }
 
 },1000);
-}
 
 
 function updateScore(correct,fastest){
