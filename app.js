@@ -1456,145 +1456,38 @@ async function updateGlobalLeaderboard() {
 }
 async function loadQuizLeaderboard() {
 
-    const table =
+   try {
 
-        document.getElementById(
-
+        const table = document.getElementById(
             'leaderboardTable'
-
         );
 
-    table.innerHTML = '';
+        table.innerHTML = '';
 
-    const snapshot =
-
-        await getDocs(
-
+        const snapshot = await getDocs(
             collection(
-
                 db,
-
                 'quizLeaderboards'
-
             )
-
         );
 
-    const entries = [];
+        console.log(
+            'Leaderboard documents:',
+            snapshot.size
+        );
 
-    snapshot.forEach(
+    } catch (error) {
 
-        docSnap => {
+        console.error(
+            'Leaderboard Error:',
+            error
+        );
 
-            const data =
+        alert(
+            error.message
+        );
 
-                docSnap.data();
-
-            if (
-
-                data.quizId ===
-
-                loggedInUser.quizId
-
-            ) {
-
-                entries.push(
-
-                    data
-
-                );
-
-            }
-
-        }
-
-    );
-
-    entries.sort(
-
-        (
-
-            a,
-
-            b
-
-        ) =>
-
-            b.score -
-
-            a.score
-
-    );
-
-    table.innerHTML =
-
-        `
-
-        <tr>
-
-            <th>
-
-                Rank
-
-            </th>
-
-            <th>
-
-                Email
-
-            </th>
-
-            <th>
-
-                Score
-
-            </th>
-
-        </tr>
-
-    `;
-
-    entries.forEach(
-
-        (
-
-            player,
-
-            index
-
-        ) => {
-
-            table.innerHTML +=
-
-                `
-
-                <tr>
-
-                    <td>
-
-                        ${index + 1}
-
-                    </td>
-
-                    <td>
-
-                        ${player.email}
-
-                    </td>
-
-                    <td>
-
-                        ${player.score}
-
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-
-    );
+    }
 
 }
 function startLobbyCountdown(
