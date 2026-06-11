@@ -1297,8 +1297,10 @@ function handleQuizStatus(status) {
 
     ) {
 
-        quizStarted = true;
-startQuizEngine();
+        if (!quizStarted) { 
+            quizStarted = true; 
+            startQuizEngine(); 
+        }
     }
 
     else if (
