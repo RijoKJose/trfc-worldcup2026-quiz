@@ -2221,13 +2221,21 @@ setInterval(updateCountdown,1000);
 
 listenForQuizStatus();
 
-setInterval(
+onAuthStateChanged(auth, user => {
 
-    updateQuizState,
+    if (user) {
 
-    5000
+        setInterval(
 
-);
+            updateQuizState,
+
+            5000
+
+        );
+
+    }
+
+});
 window.showSection = showSection;
 window.showRegister = showRegister;
 window.joinQuiz = joinQuiz;
