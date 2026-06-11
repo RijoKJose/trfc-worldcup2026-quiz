@@ -1,17 +1,10 @@
 {
   "name": "trfc-world-cup-challenge",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
-  "scripts": {
-    "dev": "vercel dev",
-    "start": "vercel dev"
-  },
   "dependencies": {
-    "firebase": "^11.9.1"
+    "firebase": "^11.9.1",
+    "@google/generative-ai": "^0.24.1"
   }
-}
-{
-  "name": "trfc-worldcup2026-quiz",
-  "version": "1.0.0",
-  "private": true
 }
