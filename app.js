@@ -2193,18 +2193,6 @@ renderUsers();
 alert('Users Cleared');
 }
 
-function downloadCSV(content,file){
-
-const blob=new Blob([content],{type:'text/csv'});
-
-const a=document.createElement('a');
-
-a.href=URL.createObjectURL(blob);
-
-a.download=file;
-
-a.click();
-}
 
 function saveSettings(){
 
