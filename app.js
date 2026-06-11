@@ -1888,17 +1888,6 @@ Score: ${score}`
     );
 
 }
-async function showLeaderboard() {
-
-    showSection(
-
-        'leaderboardSection'
-
-    );
-
-    await loadQuizLeaderboard();
-
-}
 
 async function exportUsers() {
 
