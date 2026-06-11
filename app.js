@@ -1747,7 +1747,7 @@ async function updateQuizState() {
 }
 async function completeQuiz() {
 
-    await updateDoc(
+    await setDoc(
 
         doc(
 
@@ -1755,9 +1755,7 @@ async function completeQuiz() {
 
             'participants',
 
-            loggedInUser
-
-                .participantId
+            loggedInUser.participantId
 
         ),
 
@@ -1768,14 +1766,20 @@ async function completeQuiz() {
             score,
 
             completedAt:
-
                 serverTimestamp()
+
+        },
+
+        {
+
+            merge: true
 
         }
 
     );
 
 }
+
 
 function updateScore(correct,fastest){
 
