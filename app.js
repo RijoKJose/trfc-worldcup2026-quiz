@@ -203,11 +203,21 @@ function startQuizEngine() {
 }
 function loadQuestion() {
 
-   if (currentQuestion >= quiz.length) { 
-       await finishQuiz(); return; 
-   } 
-    questionStartTime = Date.now(); 
-    const q = quiz[currentQuestion];
+    if (
+
+        currentQuestion >= quiz.length
+
+    ) {
+
+        finishQuiz();
+
+        return;
+
+    }
+
+    const q =
+
+        quiz[currentQuestion];
 
     document.getElementById(
 
@@ -579,24 +589,49 @@ await loadQuiz(
     }
 
 }
+function submitAnswer(
 
+    selectedAnswer
 
-async function submitAnswer(selectedAnswer) {
+) {
 
-    clearInterval(timerInterval);
+    clearInterval(
 
-    const q = quiz[currentQuestion];
+        timerInterval
+
+    );
+
+    const q =
+
+        quiz[currentQuestion];
 
     const timeTaken =
-        Date.now() - questionStartTime;
 
-    if (selectedAnswer === q.answer) {
+        Date.now() -
 
-        score += settings.correctPoints;
+        questionStartTime;
 
-        if (timeTaken <= 3000) {
+    if (
 
-            score += settings.fastestBonus;
+        selectedAnswer ===
+
+        q.answer
+
+    ) {
+
+        score +=
+
+            settings.correctPoints;
+
+        if (
+
+            timeTaken <= 3000
+
+        ) {
+
+            score +=
+
+                settings.fastestBonus;
 
         }
 
@@ -604,18 +639,9 @@ async function submitAnswer(selectedAnswer) {
 
     currentQuestion++;
 
-    if (currentQuestion >= quiz.length) {
-
-        await finishQuiz();
-
-        return;
-
-    }
-
     loadQuestion();
 
 }
-
 async function loadQuiz(
 
     quizId
@@ -1430,38 +1456,145 @@ async function updateGlobalLeaderboard() {
 }
 async function loadQuizLeaderboard() {
 
-   try {
+    const table =
 
-        const table = document.getElementById(
+        document.getElementById(
+
             'leaderboardTable'
+
         );
 
-        table.innerHTML = '';
+    table.innerHTML = '';
 
-        const snapshot = await getDocs(
+    const snapshot =
+
+        await getDocs(
+
             collection(
+
                 db,
+
                 'quizLeaderboards'
+
             )
+
         );
 
-        console.log(
-            'Leaderboard documents:',
-            snapshot.size
-        );
+    const entries = [];
 
-    } catch (error) {
+    snapshot.forEach(
 
-        console.error(
-            'Leaderboard Error:',
-            error
-        );
+        docSnap => {
 
-        alert(
-            error.message
-        );
+            const data =
 
-    }
+                docSnap.data();
+
+            if (
+
+                data.quizId ===
+
+                loggedInUser.quizId
+
+            ) {
+
+                entries.push(
+
+                    data
+
+                );
+
+            }
+
+        }
+
+    );
+
+    entries.sort(
+
+        (
+
+            a,
+
+            b
+
+        ) =>
+
+            b.score -
+
+            a.score
+
+    );
+
+    table.innerHTML =
+
+        `
+
+        <tr>
+
+            <th>
+
+                Rank
+
+            </th>
+
+            <th>
+
+                Email
+
+            </th>
+
+            <th>
+
+                Score
+
+            </th>
+
+        </tr>
+
+    `;
+
+    entries.forEach(
+
+        (
+
+            player,
+
+            index
+
+        ) => {
+
+            table.innerHTML +=
+
+                `
+
+                <tr>
+
+                    <td>
+
+                        ${index + 1}
+
+                    </td>
+
+                    <td>
+
+                        ${player.email}
+
+                    </td>
+
+                    <td>
+
+                        ${player.score}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    );
 
 }
 function startLobbyCountdown(
