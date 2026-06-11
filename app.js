@@ -203,21 +203,11 @@ function startQuizEngine() {
 }
 function loadQuestion() {
 
-    if (
-
-        currentQuestion >= quiz.length
-
-    ) {
-
-        finishQuiz();
-
-        return;
-
-    }
-
-    const q =
-
-        quiz[currentQuestion];
+   if (currentQuestion >= quiz.length) { 
+       await finishQuiz(); return; 
+   } 
+    questionStartTime = Date.now(); 
+    const q = quiz[currentQuestion];
 
     document.getElementById(
 
@@ -590,49 +580,23 @@ await loadQuiz(
 
 }
 
-function submitAnswer(
 
-    selectedAnswer
+async function submitAnswer(selectedAnswer) {
 
-) {
+    clearInterval(timerInterval);
 
-    clearInterval(
-
-        timerInterval
-
-    );
-
-    const q =
-
-        quiz[currentQuestion];
+    const q = quiz[currentQuestion];
 
     const timeTaken =
+        Date.now() - questionStartTime;
 
-        Date.now() -
+    if (selectedAnswer === q.answer) {
 
-        questionStartTime;
+        score += settings.correctPoints;
 
-    if (
+        if (timeTaken <= 3000) {
 
-        selectedAnswer ===
-
-        q.answer
-
-    ) {
-
-        score +=
-
-            settings.correctPoints;
-
-        if (
-
-            timeTaken <= 3000
-
-        ) {
-
-            score +=
-
-                settings.fastestBonus;
+            score += settings.fastestBonus;
 
         }
 
@@ -640,15 +604,9 @@ function submitAnswer(
 
     currentQuestion++;
 
-    if (
+    if (currentQuestion >= quiz.length) {
 
-        currentQuestion >=
-
-        quiz.length
-
-    ) {
-
-        finishQuiz();
+        await finishQuiz();
 
         return;
 
@@ -657,6 +615,7 @@ function submitAnswer(
     loadQuestion();
 
 }
+
 async function loadQuiz(
 
     quizId
