@@ -352,9 +352,17 @@ function startTimer() {
 
                     );
 
-                    currentQuestion++;
+                 currentQuestion++;
 
-                    loadQuestion();
+if (currentQuestion >= quiz.length) {
+
+    finishQuiz();
+
+    return;
+
+}
+
+loadQuestion();
 
                 }
 
@@ -568,6 +576,11 @@ await loadQuiz(
     status.quizId
 
 );
+        if (status.status === 'LIVE') {
+
+    startQuizEngine();
+
+}
         alert(
 
             'Successfully Joined'
@@ -589,55 +602,36 @@ await loadQuiz(
     }
 
 }
-function submitAnswer(
+async function submitAnswer(selectedAnswer) {
 
-    selectedAnswer
+    clearInterval(timerInterval);
 
-) {
-
-    clearInterval(
-
-        timerInterval
-
-    );
-
-    const q =
-
-        quiz[currentQuestion];
+    const q = quiz[currentQuestion];
 
     const timeTaken =
+        Date.now() - questionStartTime;
 
-        Date.now() -
+    if (selectedAnswer === q.answer) {
 
-        questionStartTime;
+        score += settings.correctPoints;
 
-    if (
+        if (timeTaken <= 3000) {
 
-        selectedAnswer ===
-
-        q.answer
-
-    ) {
-
-        score +=
-
-            settings.correctPoints;
-
-        if (
-
-            timeTaken <= 3000
-
-        ) {
-
-            score +=
-
-                settings.fastestBonus;
+            score += settings.fastestBonus;
 
         }
 
     }
 
     currentQuestion++;
+
+    if (currentQuestion >= quiz.length) {
+
+        await finishQuiz();
+
+        return;
+
+    }
 
     loadQuestion();
 
@@ -997,7 +991,7 @@ answer
 
 localStorage.setItem('quiz',JSON.stringify(quiz));
 
-renderQuestions();
+renderReviewQuestions();
 }
 
 function updateQuestion(
@@ -1829,13 +1823,37 @@ async function finishQuiz() {
 
     );
 
+    try {
+
     await completeQuiz();
+
+} catch (error) {
+
+    console.error(error);
+
+}
+
+try {
 
     await updateQuizLeaderboard();
 
+} catch (error) {
+
+    console.error(error);
+
+}
+
+try {
+
     await updateGlobalLeaderboard();
 
-    await showLeaderboard();
+} catch (error) {
+
+    console.error(error);
+
+}
+
+await showLeaderboard();
 
     alert(
 
@@ -2058,7 +2076,7 @@ async function showLeaderboard(admin=false){
 }
 
 function renderLeaderboardManage(){
-showLeaderboardAdmin(true);
+    showLeaderboard(true);
 }
 
 function editPoints(index){
@@ -2172,7 +2190,7 @@ alert(
 'Correct Answer: +'+settings.correctPoints+'\n'+
 'Fastest Bonus: +'+settings.fastestBonus+'\n\n'+
 'RULES\n'+
-'- 15 seconds per question\n'+
+'- 10 seconds per question\n'+
 '- One answer only\n'+
 '- Quiz starts only after admin starts\n'+
 '- Users can only VIEW leaderboard'
