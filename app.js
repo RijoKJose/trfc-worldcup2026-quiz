@@ -14,8 +14,10 @@ import {
     updateDoc,
     deleteDoc,
     collection,
-    getDocs
-} from 'https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js';
+    getDocs,
+    onSnapshot
+}
+from 'https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js';
 
 
 let users = [];
@@ -39,12 +41,9 @@ let timer = 10;
 let timerInterval = null;
 let questionStartTime = null;
 let interval;
-let questionStartTime;
 let lobbyActive = false;
-let quizStarted = false;
 let quizEnded = false;
 let lobbyCountdown = 60;
-let currentQuizId = null;
 let lobbyInterval = null;
 let loggedInUser = null;
 let lobbyRemaining = 60;
@@ -688,70 +687,24 @@ async function loadQuiz(
         .questions;
 
 }
-function adminLogin(){
-try {
+async function adminLogin() {
 
-    await signInWithEmailAndPassword(
+    try {
 
-        auth,
-
-        document.getElementById('adminEmail').value,
-
-        document.getElementById('adminPassword').value
-
-    );
-
-} catch (error) {
-
-    alert(error.message);
-
-}
-}
-async function loadQuiz(
-
-    quizId
-
-) {
-
-    const quizDoc =
-
-        await getDoc(
-
-            doc(
-
-                db,
-
-                'quizzes',
-
-                quizId
-
-            )
-
+        await signInWithEmailAndPassword(
+            auth,
+            document.getElementById('adminEmail').value,
+            document.getElementById('adminPassword').value
         );
 
-    if (
+    } catch (error) {
 
-        !quizDoc.exists()
-
-    ) {
-
-        alert(
-
-            'Quiz Not Found'
-
-        );
-
-        return;
+        alert(error.message);
 
     }
 
-    quiz =
-
-        quizDoc.data()
-
-        .questions;
-
 }
+
 
 async function generateAIQuestions() {
 
@@ -1827,14 +1780,6 @@ async function completeQuiz() {
     );
 
 }
-function loadQuestion(){
-
-answered=false;
-
-if(current>=quiz.length){
-await completeQuiz();
-return;
-}
 
 questionStartTime=Date.now();
 
@@ -1878,28 +1823,6 @@ nextQuestion();
 },1000);
 }
 
-function submitAnswer(index){
-
-if(answered) return;
-
-answered=true;
-
-const q=quiz[current];
-
-const correct=index===q.answer;
-
-const responseTime=Date.now()-questionStartTime;
-
-const fastest=responseTime<3000;
-
-updateScore(correct,fastest);
-
-clearInterval(interval);
-
-setTimeout(()=>{
-nextQuestion();
-},100);
-}
 
 function updateScore(correct,fastest){
 
@@ -2132,7 +2055,7 @@ function downloadCSV(
 
 }
 
-function showLeaderboard(admin=false){
+function showLeaderboardAdmin(admin=false){
 
 showSection('leaderboardSection');
 await loadQuizLeaderboard(isAdmin);
@@ -2174,7 +2097,7 @@ table.innerHTML=html;
 }
 
 function renderLeaderboardManage(){
-showLeaderboard(true);
+showLeaderboardAdmin(true);
 }
 
 function editPoints(index){
@@ -2351,7 +2274,6 @@ div.innerText='Daily Quiz Starts at 7 PM';
 
 setInterval(updateCountdown,1000);
 
-showLeaderboard(false);
 listenForQuizStatus();
 
 setInterval(
@@ -2379,7 +2301,7 @@ window.saveSettings = saveSettings;
 window.showLeaderboard = showLeaderboard;
 window.editPoints = editPoints;
 window.removePoints = removePoints;
-window.functionName = functionName;
+window.showHelp = showHelp;
 window.updateQuestion = updateQuestion;
 window.updateOption = updateOption;
 window.updateAnswer = updateAnswer;
