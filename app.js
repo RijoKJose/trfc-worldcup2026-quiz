@@ -1781,48 +1781,6 @@ async function completeQuiz() {
 
 }
 
-questionStartTime=Date.now();
-
-const q=quiz[current];
-
-document.getElementById('question').innerText=q.question;
-
-const options=document.getElementById('options');
-
-options.innerHTML='';
-
-q.options.forEach((opt,index)=>{
-
-const btn=document.createElement('button');
-
-btn.innerText=opt;
-
-btn.onclick=()=>submitAnswer(index);
-
-options.appendChild(btn);
-
-});
-
-timer=15;
-
-document.getElementById('timer').innerText=timer;
-
-clearInterval(interval);
-
-interval=setInterval(()=>{
-
-timer--;
-
-document.getElementById('timer').innerText=timer;
-
-if(timer<=0){
-clearInterval(interval);
-nextQuestion();
-}
-
-},1000);
-
-
 function updateScore(correct,fastest){
 
 let player=leaderboard.find(
