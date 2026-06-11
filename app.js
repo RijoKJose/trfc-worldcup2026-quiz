@@ -2057,7 +2057,7 @@ function downloadCSV(
 function showLeaderboardAdmin(admin=false){
 
 showSection('leaderboardSection');
-await loadQuizLeaderboard(isAdmin);
+await loadQuizLeaderboard(admin);
 
 const table=document.getElementById('leaderboardTable');
 
