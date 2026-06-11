@@ -57,11 +57,14 @@ Return ONLY valid JSON in this exact format:
 ]
 
 Rules:
-- Exactly 4 options.
-- "answer" must be 0, 1, 2 or 3.
+- Exactly 4 options per question.
+- Randomize the order of options.
+- The correct answer position must vary naturally across all questions.
+- The "answer" field must contain the correct index (0, 1, 2, or 3) after randomization.
+- Avoid repeating the same answer index consecutively.
 - No markdown.
-- No explanation.
-- Return only JSON.
+- No explanations.
+- Return ONLY valid JSON.
 `;
 
         const result =
