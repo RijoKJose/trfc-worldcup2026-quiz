@@ -589,6 +589,7 @@ await loadQuiz(
     }
 
 }
+
 function submitAnswer(
 
     selectedAnswer
@@ -638,6 +639,20 @@ function submitAnswer(
     }
 
     currentQuestion++;
+
+    if (
+
+        currentQuestion >=
+
+        quiz.length
+
+    ) {
+
+        finishQuiz();
+
+        return;
+
+    }
 
     loadQuestion();
 
