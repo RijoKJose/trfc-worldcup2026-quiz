@@ -2261,20 +2261,17 @@ const list=document.getElementById('usersList');
 
 list.innerHTML='';
 
-const snapshot = await getDocs( collection( db, 'users' ) ); 
-snapshot.forEach(docSnap => { const u = docSnap.data();
+const snapshot = await getDocs( collection( db, 'users')); 
+snapshot.forEach(docSnap => { 
+    const u = docSnap.data();
+    const div=document.createElement('div');
+    div.className='card';
 
-const div=document.createElement('div');
-
-div.className='card';
-
-div.innerHTML=
+    div.innerHTML=
 '<p><b>'+u.name+'</b><br>'+u.email+'<br>'+u.phone+'</p>'+
 '<button onclick="editUser('+index+')">Edit</button>'+
 '<button onclick="deleteUser('+index+')">Delete</button>';
-
-list.appendChild(div);
-
+    list.appendChild(div);
 });
 }
 
