@@ -2029,55 +2029,95 @@ async function showLeaderboard(admin=false){
 
     showSection('leaderboardSection');
 
-    await loadQuizLeaderboard();
+    await loadGlobalLeaderboard();
 
-    const table =
-        document.getElementById(
-            'leaderboardTable'
-        );
+}
 
-    let html =
-        '<tr><th>Name</th><th>Correct</th><th>Wrong</th><th>Points</th>';
+async function loadGlobalLeaderboard() {
 
-    if (admin) {
-
-        html += '<th>Action</th>';
-
-    }
-
-    html += '</tr>';
-
-    leaderboard.sort(
-        (a, b) => b.points - a.points
+    const table = document.getElementById(
+        'leaderboardTable'
     );
 
-    leaderboard.forEach(
-        (l, index) => {
+    table.innerHTML = '';
 
-            html +=
+    const snapshot = await getDocs(
+
+        collection(
+
+            db,
+
+            'globalLeaderboards'
+
+        )
+
+    );
+
+    const entries = [];
+
+    snapshot.forEach(docSnap => {
+
+        entries.push(
+
+            docSnap.data()
+
+        );
+
+    });
+
+    entries.sort(
+
+        (a, b) =>
+
+            b.totalPoints -
+
+            a.totalPoints
+
+    );
+
+    table.innerHTML =
+
+        '<tr>' +
+
+        '<th>Rank</th>' +
+
+        '<th>Name</th>' +
+
+        '<th>Total Points</th>' +
+
+        '</tr>';
+
+    entries.forEach(
+
+        (player, index) => {
+
+            table.innerHTML +=
+
                 '<tr>' +
-                '<td>' + l.name + '</td>' +
-                '<td>' + l.correct + '</td>' +
-                '<td>' + l.wrong + '</td>' +
-                '<td>' + l.points + '</td>';
 
-            if (admin) {
+                '<td>' +
 
-                html +=
-                    '<td>' +
-                    '<button onclick="editPoints(' + index + ')">Edit</button>' +
-                    '<button onclick="removePoints(' + index + ')">Remove</button>' +
-                    '</td>';
+                (index + 1) +
 
-            }
+                '</td>' +
 
-            html += '</tr>';
+                '<td>' +
+
+                player.name +
+
+                '</td>' +
+
+                '<td>' +
+
+                player.totalPoints +
+
+                '</td>' +
+
+                '</tr>';
 
         }
 
     );
-
-    table.innerHTML = html;
 
 }
 
