@@ -1859,7 +1859,7 @@ try {
 
 }
 
-await showLeaderboard();
+await showLeaderboard(true);
 
     alert(
 
