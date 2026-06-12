@@ -2238,17 +2238,69 @@ async function clearLeaderboard() {
     );
 
 }
-function renderUsers(){ 
-    const list=document.getElementById('usersList'); 
-    list.innerHTML=''; 
-    const snapshot = await getDocs( collection( db, 'users' ) ); 
-    snapshot.forEach(docSnap => { 
+
+async function renderUsers() {
+
+    const list = document.getElementById(
+        'usersList'
+    );
+
+    list.innerHTML = '';
+
+    const snapshot = await getDocs(
+
+        collection(
+
+            db,
+
+            'users'
+
+        )
+
+    );
+
+    snapshot.forEach(docSnap => {
+
         const u = docSnap.data();
-        const div=document.createElement('div');
-        div.className='card'; 
-        div.innerHTML= '<p><b>'+u.name+'</b><br>'+u.email+'<br>'+u.phone+'</p>'+ '<button onclick="editUser('+index+')">Edit</button>'+ '<button onclick="deleteUser('+index+')">Delete</button>'; 
-        list.appendChild(div); 
-    }); 
+
+        const div = document.createElement(
+            'div'
+        );
+
+        div.className = 'card';
+
+        div.innerHTML =
+
+            '<p><b>' +
+
+            u.name +
+
+            '</b><br>' +
+
+            u.email +
+
+            '<br>' +
+
+            u.phone +
+
+            '</p>' +
+
+            '<button onclick="editUser(\'' +
+
+            u.email +
+
+            '\')">Edit</button>' +
+
+            '<button onclick="deleteUser(\'' +
+
+            u.email +
+
+            '\')">Delete</button>';
+
+        list.appendChild(div);
+
+    });
+
 }
 
 async function editUser(email) {
@@ -2518,3 +2570,6 @@ window.updateQuestion = updateQuestion;
 window.updateOption = updateOption;
 window.updateAnswer = updateAnswer;
 window.deleteQuestion = deleteQuestion;
+window.renderUsers = renderUsers;
+window.editUser = editUser;
+window.deleteUser = deleteUser;
