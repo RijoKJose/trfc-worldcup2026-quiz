@@ -2125,46 +2125,144 @@ function renderLeaderboardManage(){
     showLeaderboard(true);
 }
 
-function editPoints(index){
+async function editPoints(index) {
 
-const points=Number(
-prompt('New Points',leaderboard[index].points)
-);
+    const points = Number(
 
-leaderboard[index].points=points;
+        prompt(
 
-localStorage.setItem('leaderboard',JSON.stringify(leaderboard));
+            'New Points',
 
-renderLeaderboardManage();
+            leaderboard[index].totalPoints
+
+        )
+
+    );
+
+    if (isNaN(points)) {
+
+        return;
+
+    }
+
+    await updateDoc(
+
+        doc(
+
+            db,
+
+            'globalLeaderboards',
+
+            leaderboard[index].email
+
+        ),
+
+        {
+
+            totalPoints: points
+
+        }
+
+    );
+
+    renderLeaderboardManage();
+
 }
 
-function removePoints(index){
+async function removePoints(index) {
 
-leaderboard.splice(index,1);
+    if (
 
-localStorage.setItem('leaderboard',JSON.stringify(leaderboard));
+        !confirm(
 
-renderLeaderboardManage();
+            'Remove this leaderboard entry?'
+
+        )
+
+    ) {
+
+        return;
+
+    }
+
+    await deleteDoc(
+
+        doc(
+
+            db,
+
+            'globalLeaderboards',
+
+            leaderboard[index].email
+
+        )
+
+    );
+
+    renderLeaderboardManage();
+
 }
 
-function clearLeaderboard(){
 
-leaderboard=[];
+async function clearLeaderboard() {
 
-localStorage.setItem('leaderboard',JSON.stringify(leaderboard));
+    if (
 
-renderLeaderboardManage();
+        !confirm(
 
-alert('Leaderboard Cleared');
+            'Clear entire leaderboard?'
+
+        )
+
+    ) {
+
+        return;
+
+    }
+
+    const snapshot = await getDocs(
+
+        collection(
+
+            db,
+
+            'globalLeaderboards'
+
+        )
+
+    );
+
+    for (
+
+        const docSnap of snapshot.docs
+
+    ) {
+
+        await deleteDoc(
+
+            docSnap.ref
+
+        );
+
+    }
+
+    renderLeaderboardManage();
+
+    alert(
+
+        'Leaderboard Cleared'
+
+    );
+
 }
-
 function renderUsers(){
 
 const list=document.getElementById('usersList');
 
 list.innerHTML='';
 
-users.forEach((u,index)=>{
+const snapshot = await getDocs( collection( db, 'users' ) ); 
+snapshot.forEach(docSnap => { const u = docSnap.data();
 
 const div=document.createElement('div');
 
@@ -2180,67 +2278,203 @@ list.appendChild(div);
 });
 }
 
-function editUser(index){
+async function editUser(email) {
 
-const u=users[index];
+    const userDoc = await getDoc(
 
-const name=prompt('Name',u.name);
-const email=prompt('Email',u.email);
-const phone=prompt('Phone',u.phone);
+        doc(
 
-users[index]={name,email,phone};
+            db,
 
-localStorage.setItem('users',JSON.stringify(users));
+            'users',
 
-renderUsers();
+            email
+
+        )
+
+    );
+
+    const u = userDoc.data();
+
+    const name = prompt(
+
+        'Name',
+
+        u.name
+
+    );
+
+    const phone = prompt(
+
+        'Phone',
+
+        u.phone
+
+    );
+
+    await updateDoc(
+
+        doc(
+
+            db,
+
+            'users',
+
+            email
+
+        ),
+
+        {
+
+            name,
+
+            phone
+
+        }
+
+    );
+
+    renderUsers();
+
 }
 
-function deleteUser(index){
+async function deleteUser(email) {
 
-users.splice(index,1);
+    if (
 
-localStorage.setItem('users',JSON.stringify(users));
+        !confirm(
 
-renderUsers();
+            'Delete user?'
+
+        )
+
+    ) {
+
+        return;
+
+    }
+
+    await deleteDoc(
+
+        doc(
+
+            db,
+
+            'users',
+
+            email
+
+        )
+
+    );
+
+    renderUsers();
+
 }
 
-function clearUsers(){
+async function clearUsers() {
 
-users=[];
+    if (
 
-localStorage.setItem('users',JSON.stringify(users));
+        !confirm(
 
-renderUsers();
+            'Delete all users?'
 
-alert('Users Cleared');
+        )
+
+    ) {
+
+        return;
+
+    }
+
+    const snapshot = await getDocs(
+
+        collection(
+
+            db,
+
+            'users'
+
+        )
+
+    );
+
+    for (
+
+        const docSnap of snapshot.docs
+
+    ) {
+
+        await deleteDoc(
+
+            docSnap.ref
+
+        );
+
+    }
+
+    renderUsers();
+
+    alert(
+
+        'Users Cleared'
+
+    );
+
 }
 
 
-function saveSettings(){
+async function saveSettings() {
 
-settings.correctPoints=
-Number(document.getElementById('correctPoints').value);
+    await setDoc(
 
-settings.fastestBonus=
-Number(document.getElementById('fastestBonus').value);
+        doc(
 
-localStorage.setItem('settings',JSON.stringify(settings));
+            db,
 
-alert('Settings Updated');
-}
+            'settings',
 
-function showHelp(){
+            'quiz'
 
-alert(
-'POINT SYSTEM\n\n'+
-'Correct Answer: +'+settings.correctPoints+'\n'+
-'Fastest Bonus: +'+settings.fastestBonus+'\n\n'+
-'RULES\n'+
-'- 10 seconds per question\n'+
-'- One answer only\n'+
-'- Quiz starts only after admin starts\n'+
-'- Users can only VIEW leaderboard'
-);
+        ),
+
+        {
+
+            correctPoints:
+
+                Number(
+
+                    document.getElementById(
+
+                        'correctPoints'
+
+                    ).value
+
+                ),
+
+            fastestBonus:
+
+                Number(
+
+                    document.getElementById(
+
+                        'fastestBonus'
+
+                    ).value
+
+                )
+
+        }
+
+    );
+
+    alert(
+
+        'Settings Updated'
+
+    );
+
 }
 
 function updateCountdown(){
