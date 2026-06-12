@@ -19,16 +19,7 @@ text-align:center;
     width:100%; 
     display:block; 
 } 
-.mission-banner{ 
-    margin:20px auto; 
-    max-width:600px; 
-} 
-.mission-banner img{ 
-    width:100%; 
-    border-radius:12px; 
-    box-shadow:0 4px 15px rgba(0,0,0,0.4); 
-    display:block; 
-}
+
 button{
 padding:10px 20px;
 margin:10px;
@@ -154,8 +145,6 @@ textarea{
 
         width:100%;
 
-    }.mission-banner { 
-        max-width:100%; 
     }
 
 }
