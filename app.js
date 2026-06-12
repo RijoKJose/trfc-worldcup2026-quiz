@@ -2238,7 +2238,18 @@ async function clearLeaderboard() {
     );
 
 }
-function renderUsers(){ const list=document.getElementById('usersList'); list.innerHTML=''; users.forEach((u,index)=>{ const div=document.createElement('div'); div.className='card'; div.innerHTML= '<p><b>'+u.name+'</b><br>'+u.email+'<br>'+u.phone+'</p>'+ '<button onclick="editUser('+index+')">Edit</button>'+ '<button onclick="deleteUser('+index+')">Delete</button>'; list.appendChild(div); }); }
+function renderUsers(){ 
+    const list=document.getElementById('usersList'); 
+    list.innerHTML=''; 
+    const snapshot = await getDocs( collection( db, 'users' ) ); 
+    snapshot.forEach(docSnap => { 
+        const u = docSnap.data();
+        const div=document.createElement('div');
+        div.className='card'; 
+        div.innerHTML= '<p><b>'+u.name+'</b><br>'+u.email+'<br>'+u.phone+'</p>'+ '<button onclick="editUser('+index+')">Edit</button>'+ '<button onclick="deleteUser('+index+')">Delete</button>'; 
+        list.appendChild(div); 
+    }); 
+}
 
 async function editUser(email) {
     const userDoc = await getDoc(
@@ -2430,6 +2441,19 @@ async function saveSettings() {
 
     );
 
+}
+function showHelp(){
+
+alert(
+'POINT SYSTEM\n\n'+
+'Correct Answer: +'+settings.correctPoints+'\n'+
+'Fastest Bonus: +'+settings.fastestBonus+'\n\n'+
+'RULES\n'+
+'- 10 seconds per question\n'+
+'- One answer only\n'+
+'- Quiz starts only after admin starts\n'+
+'- Users can only VIEW leaderboard'
+);
 }
 
 function updateCountdown(){
