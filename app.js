@@ -74,23 +74,6 @@ onAuthStateChanged(auth, user => {
     }
 
 });
-const pool = [
-{question:'Which country won FIFA 2022?',options:['Argentina','Brazil','France','Germany'],answer:0},
-{question:'Who is CR7?',options:['Messi','Ronaldo','Mbappe','Neymar'],answer:1},
-{question:'Who won FIFA 2018?',options:['France','Brazil','Argentina','Germany'],answer:0},
-{question:'Who won FIFA 2006?',options:['Italy','France','Brazil','Germany'],answer:0},
-{question:'Who scored Hand of God goal?',options:['Maradona','Messi','Pele','Ronaldo'],answer:0},
-{question:'Which country hosted FIFA 2010?',options:['South Africa','Brazil','Russia','Germany'],answer:0},
-{question:'Which stadium hosted FIFA 2022 final?',options:['Lusail Stadium','Camp Nou','Maracana','Wembley'],answer:0},
-{question:'Who captained Argentina in 2022?',options:['Messi','Di Maria','Otamendi','Dybala'],answer:0},
-{question:'Which nation lost 7-1 to Germany?',options:['Brazil','France','Spain','Italy'],answer:0},
-{question:'Which goalkeeper had most clean sheets in FIFA 2006?',options:['Buffon','Casillas','Kahn','Barthez'],answer:0},
-{question:'Who won FIFA 1998?',options:['France','Brazil','Germany','Italy'],answer:0},
-{question:'Which player scored most World Cup goals?',options:['Klose','Ronaldo','Pele','Messi'],answer:0},
-{question:'Who won Ballon d’Or 2023?',options:['Messi','Ronaldo','Mbappe','Haaland'],answer:0},
-{question:'Which nation won first FIFA World Cup?',options:['Uruguay','Brazil','Germany','Italy'],answer:0},
-{question:'Who won Copa America 2021?',options:['Argentina','Brazil','Chile','Uruguay'],answer:0}
-];
 
 function showSection(id){
 hideAll();
@@ -2255,40 +2238,15 @@ async function clearLeaderboard() {
     );
 
 }
-function renderUsers(){
-
-const list=document.getElementById('usersList');
-
-list.innerHTML='';
-
-const snapshot = await getDocs( collection( db, 'users')); 
-snapshot.forEach(docSnap => { 
-    const u = docSnap.data();
-    const div=document.createElement('div');
-    div.className='card';
-
-    div.innerHTML=
-'<p><b>'+u.name+'</b><br>'+u.email+'<br>'+u.phone+'</p>'+
-'<button onclick="editUser('+index+')">Edit</button>'+
-'<button onclick="deleteUser('+index+')">Delete</button>';
-    list.appendChild(div);
-});
-}
+function renderUsers(){ const list=document.getElementById('usersList'); list.innerHTML=''; users.forEach((u,index)=>{ const div=document.createElement('div'); div.className='card'; div.innerHTML= '<p><b>'+u.name+'</b><br>'+u.email+'<br>'+u.phone+'</p>'+ '<button onclick="editUser('+index+')">Edit</button>'+ '<button onclick="deleteUser('+index+')">Delete</button>'; list.appendChild(div); }); }
 
 async function editUser(email) {
-
     const userDoc = await getDoc(
-
         doc(
-
             db,
-
             'users',
-
             email
-
         )
-
     );
 
     const u = userDoc.data();
