@@ -37,7 +37,7 @@ let current = 0;
 let answered = false;
 let currentQuestion = 0;
 let score = 0;
-let timer = 10;
+let timer = 15;
 let timerInterval = null;
 let questionStartTime = null;
 let interval;
@@ -289,7 +289,7 @@ function startTimer() {
 
     );
 
-    timer = 10;
+    timer = 15;
 
     questionStartTime =
 
@@ -1178,7 +1178,7 @@ async function startQuiz() {
 
         const quizEndTime =
             quizStartTime +
-            (10 * 10 * 1000) +
+            (15 * 10 * 1000) +
             (20 * 1000);
 
         await setDoc(
