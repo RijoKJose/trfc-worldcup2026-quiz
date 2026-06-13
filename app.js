@@ -37,6 +37,11 @@ let current = 0;
 let answered = false;
 let currentQuestion = 0;
 let score = 0;
+let correctAnswers = 0;
+let wrongAnswers = 0;
+let fastestBonusCount = 0;
+let answerPoints = 0;
+let fastestBonusPoints = 0;
 let timer = 15;
 let timerInterval = null;
 let questionStartTime = null;
@@ -174,6 +179,11 @@ function startQuizEngine() {
     currentQuestion = 0;
 
     score = 0;
+correctAnswers = 0;
+wrongAnswers = 0;
+fastestBonusCount = 0;
+answerPoints = 0;
+fastestBonusPoints = 0;
 
     showSection(
 
@@ -594,17 +604,29 @@ async function submitAnswer(selectedAnswer) {
     const timeTaken =
         Date.now() - questionStartTime;
 
-    if (selectedAnswer === q.answer) {
+if (selectedAnswer === q.answer) {
 
-        score += settings.correctPoints;
+    correctAnswers++;
 
-        if (timeTaken <= 3000) {
+    score += settings.correctPoints;
 
-            score += settings.fastestBonus;
+    answerPoints += settings.correctPoints;
 
-        }
+    if (timeTaken <= 3000) {
+
+        fastestBonusCount++;
+
+        score += settings.fastestBonus;
+
+        fastestBonusPoints += settings.fastestBonus;
 
     }
+
+} else {
+
+    wrongAnswers++;
+
+}
 
     currentQuestion++;
 
@@ -1338,101 +1360,106 @@ async function updateQuizLeaderboard() {
     );
 
 }
+
 async function updateGlobalLeaderboard() {
 
-    const globalRef =
+    const globalRef = doc(
 
-        doc(
+        db,
 
-            db,
+        'globalLeaderboards',
 
-            'globalLeaderboards',
+        loggedInUser.email
 
-            loggedInUser.email
+    );
 
-        );
+    const existing = await getDoc(globalRef);
 
-    const existing =
+    if (existing.exists()) {
 
-        await getDoc(
+        const data = existing.data();
 
-            globalRef
+        await updateDoc(globalRef, {
 
-        );
+            totalQuizzes:
+                (data.totalQuizzes || 0) + 1,
 
-    if (
+            totalCorrect:
+                (data.totalCorrect || 0) +
+                correctAnswers,
 
-        existing.exists()
+            totalWrong:
+                (data.totalWrong || 0) +
+                wrongAnswers,
 
-    ) {
+            fastestBonusCount:
+                (data.fastestBonusCount || 0) +
+                fastestBonusCount,
 
-        const total =
+            answerPoints:
+                (data.answerPoints || 0) +
+                answerPoints,
 
-            existing.data()
+            fastestBonusPoints:
+                (data.fastestBonusPoints || 0) +
+                fastestBonusPoints,
 
-                .totalPoints +
+            totalPoints:
+                (data.totalPoints || 0) +
+                score
 
-            score;
+        });
 
-        await updateDoc(
+    } else {
 
-            globalRef,
+        const user = await getDoc(
 
-            {
+            doc(
 
-                totalPoints:
+                db,
 
-                    total
+                'users',
 
-            }
+                loggedInUser.email
 
-        );
-
-    }
-
-    else {
-
-        const user =
-
-            await getDoc(
-
-                doc(
-
-                    db,
-
-                    'users',
-
-                    loggedInUser.email
-
-                )
-
-            );
-
-        await setDoc(
-
-            globalRef,
-
-            {
-
-                email:
-
-                    loggedInUser.email,
-
-                name:
-
-                    user.data().name,
-
-                totalPoints:
-
-                    score
-
-            }
+            )
 
         );
+
+        await setDoc(globalRef, {
+
+            email:
+                loggedInUser.email,
+
+            name:
+                user.data().name,
+
+            totalQuizzes: 1,
+
+            totalCorrect:
+                correctAnswers,
+
+            totalWrong:
+                wrongAnswers,
+
+            fastestBonusCount:
+                fastestBonusCount,
+
+            answerPoints:
+                answerPoints,
+
+            fastestBonusPoints:
+                fastestBonusPoints,
+
+            totalPoints:
+                score
+
+        });
 
     }
 
 }
+
 async function loadQuizLeaderboard() {
 
     const table =
@@ -2066,7 +2093,11 @@ async function loadGlobalLeaderboard() {
 
         '<th>Name</th>' +
 
-        '<th>Total Points</th>' +
+        '<th>Total Quizzes</th>' +
+'<th>Correct</th>' +
+'<th>Wrong</th>' +
+'<th>Fast Bonus</th>' +
+'<th>Total Points</th>' +
 
         '</tr>';
 
@@ -2091,10 +2122,24 @@ async function loadGlobalLeaderboard() {
                 '</td>' +
 
                 '<td>' +
+player.totalQuizzes +
+'</td>' +
 
-                player.totalPoints +
+'<td>' +
+player.totalCorrect +
+'</td>' +
 
-                '</td>' +
+'<td>' +
+player.totalWrong +
+'</td>' +
+
+'<td>' +
+player.fastestBonusCount +
+'</td>' +
+
+'<td>' +
+player.totalPoints +
+'</td>' +
 
                 '</tr>';
 
