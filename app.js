@@ -2501,7 +2501,7 @@ alert(
 'Correct Answer: +'+settings.correctPoints+'\n'+
 'Fastest Bonus: +'+settings.fastestBonus+'\n\n'+
 'RULES\n'+
-'- 10 seconds per question\n'+
+'- 15 seconds per question\n'+
 '- One answer only\n'+
 '- Quiz starts only after admin starts\n'+
 '- Users can only VIEW leaderboard'
