@@ -1871,6 +1871,8 @@ try {
 
 await showLeaderboard(true);
 
+if (loggedInUser) {
+
     alert(
 
         `Quiz Completed!
@@ -1878,6 +1880,13 @@ await showLeaderboard(true);
 Score: ${score}`
 
     );
+
+} else {
+    alert(
+        `Quiz Completed!`
+    );
+}
+
 
 }
 
