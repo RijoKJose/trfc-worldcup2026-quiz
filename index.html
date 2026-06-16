@@ -14,19 +14,19 @@
     <div id="countdown"></div>
 
     <div class="buttons">
-        <button onclick="showSection('joinSection')">Join Quiz</button>
+        <button onclick="showSection('joinSection')">Quiz Arena</button>
         <button onclick="showLeaderboard(false)">Leaderboard</button>
         <button onclick="showHelp()">Help</button>
-        <button onclick="showSection('adminSection')">Referee</button>
+        <button onclick="showSection('adminSection')">Quiz Master Arena</button>
     </div>
 </header>
 
 <section id="joinSection" class="hidden">
-    <h2>User Login</h2>
+    <h2>Quiz Arena</h2>
 
     <input type="email" id="loginEmail" placeholder="Enter Email">
 
-    <button onclick="joinQuiz()">Continue</button>
+    <button onclick="joinQuiz()">Join Quiz</button>
 
     <p id="quizStatusMessage"></p>
 
@@ -77,7 +77,7 @@
 
 <section id="adminSection" class="hidden">
 
-    <h2>Admin Access</h2>
+    <h2>Quiz Master Arena</h2>
 
     <div id="adminLoginSection">
 
@@ -97,7 +97,7 @@
 
         <div class="dashboard-header">
 
-            <h3>Admin Dashboard</h3>
+            <h3>Master Dashboard</h3>
 
             <button onclick="adminLogout()">Logout</button>
 
