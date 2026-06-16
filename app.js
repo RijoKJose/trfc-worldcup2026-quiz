@@ -2376,7 +2376,7 @@ async function editUser(email) {
         u.name
 
     );
-
+if ( name === null || name.trim() === '' ) { return; }
     const phone = prompt(
 
         'Phone',
@@ -2384,28 +2384,8 @@ async function editUser(email) {
         u.phone
 
     );
-
-    await updateDoc(
-
-        doc(
-
-            db,
-
-            'users',
-
-            email
-
-        ),
-
-        {
-
-            name,
-
-            phone
-
-        }
-
-    );
+if ( phone === null || phone.trim() === '' ) { return; }
+   await updateDoc( doc( db, 'users', email ), { name: name.trim(), phone: phone.trim() } );
 
     renderUsers();
 
