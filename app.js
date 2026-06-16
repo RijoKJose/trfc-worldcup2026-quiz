@@ -65,6 +65,7 @@ onAuthStateChanged(auth, user => {
 
         document.getElementById('adminLoginSection')
             ?.classList.add('hidden');
+        loadUsers();
 
     } else {
 
